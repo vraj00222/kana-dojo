@@ -382,7 +382,7 @@ const WelcomeModal = () => {
               </p>
             </div>
 
-            <div className='max-h-96 space-y-6 overflow-y-auto px-1'>
+            <div className='scrollbar-thin scrollbar-thumb-(--border-color) scrollbar-track-transparent max-h-[45vh] space-y-6 overflow-y-auto px-1 sm:max-h-96'>
               {themeSets
                 .filter(
                   themeSet =>
@@ -476,7 +476,11 @@ const WelcomeModal = () => {
                           return (
                             <button
                               key={theme.id}
-                              className='cursor-pointer rounded-lg p-3 transition-all duration-100 hover:opacity-90'
+                              className={clsx(
+                                'w-full cursor-pointer rounded-lg p-3 transition-all duration-100 hover:opacity-90',
+                                isPremiumTheme &&
+                                  'aspect-square flex flex-col justify-between',
+                              )}
                               style={{
                                 ...(wallpaper
                                   ? wallpaperStyles
@@ -669,7 +673,7 @@ const WelcomeModal = () => {
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
           className={clsx(
-            'max-h-[85vh] w-full overflow-y-auto md:w-4/5 lg:w-3/5',
+            'flex max-h-[85vh] w-full flex-col overflow-hidden md:w-4/5 lg:w-3/5',
             'm-3 rounded-2xl bg-(--card-color)',
             'shadow-2xl shadow-black/20',
             cardBorderStyles,
@@ -721,7 +725,13 @@ const WelcomeModal = () => {
           </div>
 
           {/* Content */}
-          <div ref={contentRef} className='p-3 pb-2 sm:p-5'>
+          <div
+            ref={contentRef}
+            className={clsx(
+              'min-h-0 p-3 pb-2 sm:p-5',
+              step === 'welcome' ? 'overflow-y-auto' : 'overflow-hidden',
+            )}
+          >
             {renderStepContent()}
           </div>
 

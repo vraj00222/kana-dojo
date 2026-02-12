@@ -65,7 +65,7 @@ export const GENERATED_WALLPAPERS: GeneratedWallpaper[] = [
   {
     id: 'retro-city',
     name: 'Retro City',
-    url: '/wallpapers/retro-city-2560w.avif',
-    urlWebp: '/wallpapers/retro-city-2560w.webp',
+    url: '/wallpapers/retro-city-1920w.avif',
+    urlWebp: '/wallpapers/retro-city-1920w.webp',
   },
 ];
