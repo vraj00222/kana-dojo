@@ -477,12 +477,12 @@
     "id": 80,
     "fact": "Japan has 'midnight service' buses for people who miss the last train, charging premium prices to get workers home.",
     "issued": false,
-    "completed": false
+    "completed": true
   },
   {
     "id": 81,
     "fact": "The concept of 'wa' (å’Œ) in Japanese represents harmony - so important that the official name for Japan is 'Wa' (the country of harmony).",
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
