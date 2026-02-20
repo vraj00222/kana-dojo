@@ -52,23 +52,17 @@ const EMOJI_RAIN_POSITIONS = [
   { top: '96%', left: '98%', size: 'text-2xl', opacity: 'opacity-75' },
 ] as const;
 
-function getStableOffset(seed: string): number {
-  let hash = 0;
-  for (let i = 0; i < seed.length; i++) {
-    hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
-  }
-  return hash % EMOJI_RAIN_POSITIONS.length;
-}
-
 // ─── Effect card ─────────────────────────────────────────────────────────────
 
 function EffectCard({
+  id,
   name,
   emoji,
   isSelected,
   onSelect,
   group,
 }: {
+  id: string;
   name: string;
   emoji: string;
   isSelected: boolean;
@@ -76,12 +70,14 @@ function EffectCard({
   group: 'cursor-trail' | 'click';
 }) {
   const rainEmoji = emoji || '•';
-  const offset = getStableOffset(`${group}-${name}`);
+  const isNoneCard = id === 'none';
 
   return (
     <label
       className={clsx(
-        'relative h-20 overflow-hidden',
+        isNoneCard
+          ? 'flex h-20 flex-col items-center justify-center gap-1'
+          : 'relative h-20 overflow-hidden',
         buttonBorderStyles,
         'border-1 border-(--card-color)',
         'cursor-pointer px-2 py-2.5',
@@ -99,11 +95,15 @@ function EffectCard({
         checked={isSelected}
         aria-label={name}
       />
-      {EMOJI_RAIN_POSITIONS.map((slot, i) => {
-        const p = EMOJI_RAIN_POSITIONS[
-          (i + offset) % EMOJI_RAIN_POSITIONS.length
-        ];
-        return (
+      {isNoneCard ? (
+        <>
+          <span className='text-base leading-none text-(--secondary-color)'>
+            —
+          </span>
+          <span className='text-center text-xs leading-tight'>{name}</span>
+        </>
+      ) : (
+        EMOJI_RAIN_POSITIONS.map((p, i) => (
           <span
             key={`${group}-${name}-${i}`}
             className={clsx(
@@ -116,8 +116,8 @@ function EffectCard({
           >
             {rainEmoji}
           </span>
-        );
-      })}
+        ))
+      )}
     </label>
   );
 }
@@ -151,6 +151,7 @@ const Effects = () => {
           {CURSOR_TRAIL_EFFECTS.map(effect => (
             <EffectCard
               key={effect.id}
+              id={effect.id}
               name={effect.name}
               emoji={effect.emoji}
               isSelected={cursorTrailEffect === effect.id}
@@ -173,6 +174,7 @@ const Effects = () => {
           {ORDERED_CLICK_EFFECTS.map(effect => (
             <EffectCard
               key={effect.id}
+              id={effect.id}
               name={effect.name}
               emoji={effect.emoji}
               isSelected={clickEffect === effect.id}
