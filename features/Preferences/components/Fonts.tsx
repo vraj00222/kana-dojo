@@ -54,8 +54,8 @@ const Fonts = () => {
           style={{
             color:
               fontObj.name === currentFont
-                ? 'var(--main-color)'
-                : 'var(--secondary-color)',
+                ? 'var(--background-color)'
+                : 'var(--main-color)',
           }}
         >
           {fontObj.name}

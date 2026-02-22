@@ -68,7 +68,7 @@ function EffectCard({
         'cursor-pointer px-2 py-2.5',
       )}
       style={{
-        outline: isSelected ? '3px solid var(--main-color)' : 'none',
+        backgroundColor: isSelected ? 'var(--secondary-color)' : undefined,
         transition: 'background-color 275ms',
       }}
     >
