@@ -1501,7 +1501,9 @@
     "mainColor": "oklch(60.0% 0.135 200.0 / 1)",
     "secondaryColor": "oklch(78.0% 0.065 100.0 / 1)",
     "issued": true,
-    "completed": false
+    "completed": true,
+    "completedBy": "Murtazz",
+    "completedPR": 5833
   },
   {
     "id": "city-rain",
