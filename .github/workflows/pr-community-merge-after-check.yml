@@ -32,6 +32,33 @@ jobs:
               return new Promise(function(resolve) { setTimeout(resolve, ms); });
             }
 
+            async function resolvePrByHeadSha(headSha) {
+              if (!headSha) {
+                return null;
+              }
+              try {
+                const { data: associatedPrs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  commit_sha: headSha
+                });
+                const openPr = (associatedPrs || []).find(function(pr) { return pr.state === 'open'; });
+                return openPr || (associatedPrs || [])[0] || null;
+              } catch (error) {
+                console.log(`Could not resolve PR from SHA ${headSha}: ${error.message}`);
+                return null;
+              }
+            }
+
+            async function listAllPrFiles(prNumber) {
+              return await github.paginate(github.rest.pulls.listFiles, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                per_page: 100
+              });
+            }
+
             let prNumber = null;
             let expectedHeadSha = null;
 
@@ -39,12 +66,16 @@ jobs:
               const run = context.payload.workflow_run;
               const prs = run.pull_requests || [];
 
-              if (!prs.length) {
-                console.log('No pull request associated with this workflow_run');
-                return;
+              if (prs.length > 0 && prs[0].number) {
+                prNumber = prs[0].number;
+              } else {
+                const fallbackPr = await resolvePrByHeadSha(run.head_sha);
+                if (!fallbackPr || !fallbackPr.number) {
+                  console.log(`No pull request associated with workflow_run ${run.id}; skipping.`);
+                  return;
+                }
+                prNumber = fallbackPr.number;
               }
-
-              prNumber = prs[0].number;
               expectedHeadSha = run.head_sha;
             } else {
               const pr = context.payload.pull_request;
@@ -85,10 +116,33 @@ jobs:
               return;
             }
 
-            const labels = (pr.labels || []).map(function(l) { return l.name; });
+            const files = await listAllPrFiles(prNumber);
+            const allowedPrefixes = ['community/content/'];
+            const allowedFiles = new Set(['package-lock.json']);
 
-            if (!labels.includes('community-auto-merge')) {
-              console.log(`PR #${prNumber} is not marked for auto-merge`);
+            const outsideFiles = files
+              .map(function(file) { return file.filename; })
+              .filter(function(filename) {
+                if (allowedFiles.has(filename)) return false;
+                return !allowedPrefixes.some(function(prefix) { return filename.startsWith(prefix); });
+              });
+
+            if (outsideFiles.length > 0) {
+              console.log(`PR #${prNumber} touches non-community files; skipping auto-merge. Examples: ${outsideFiles.slice(0, 5).join(', ')}`);
+              return;
+            }
+
+            const invalidOps = files
+              .filter(function(file) {
+                if (!file.filename.startsWith('community/content/')) {
+                  return false;
+                }
+                return file.status === 'removed' || file.status === 'renamed';
+              })
+              .map(function(file) { return `${file.filename} (${file.status})`; });
+
+            if (invalidOps.length > 0) {
+              console.log(`PR #${prNumber} has disallowed file operations for auto-merge: ${invalidOps.join(', ')}`);
               return;
             }
 
