@@ -549,24 +549,24 @@
     "id": 92,
     "fact": "Japan's National Apology Day falls on August 15th, when the nation reflects on World War II and its aftermath.",
     "issued": false,
-    "completed": false
+    "completed": true
   },
   {
     "id": 93,
     "fact": "The Japanese word 'tekito' (適当) means both 'appropriate' and 'whatever/random' depending on context and tone.",
     "issued": false,
-    "completed": false
+    "completed": true
   },
   {
     "id": 94,
     "fact": "Japan has 'salary men insurance' that pays out if you're transferred to a remote location away from your family.",
     "issued": false,
-    "completed": false
+    "completed": true
   },
   {
     "id": 95,
     "fact": "There's a Japanese practice called 'goraiko' (御来光) - watching the sunrise from a mountain peak, especially on New Year's Day.",
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
