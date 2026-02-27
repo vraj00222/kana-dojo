@@ -300,7 +300,7 @@
     "correct": "駅まで歩いて十分かかる。",
     "explanation": "Use natural collocation and order. (Pattern set 2)",
     "id": 38,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
