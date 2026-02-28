@@ -239,7 +239,7 @@
     "explanation": "カンニング means cheating on tests. (Set 2)",
     "example": "試験でカンニングしてはいけません。",
     "id": 27,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
