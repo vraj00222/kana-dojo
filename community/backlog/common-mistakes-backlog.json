@@ -508,7 +508,7 @@
     "correct": "これはおいしい。",
     "explanation": "い-adjectives do not take だ in plain present. (Pattern set 4)",
     "id": 64,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
